@@ -54,7 +54,11 @@ class _BottomBarState extends State<BottomBar> {
                   ),
                   Center(
                     heightFactor: 0.6,
-                    child: FloatingActionButton(backgroundColor: Colors.orange, child: Icon(Icons.shopping_basket), elevation: 0.1, onPressed: () {}),
+                    child: FloatingActionButton(
+                        backgroundColor: Colors.orange,
+                        child: Icon(Icons.shopping_basket),
+                        elevation: 0.1,
+                        onPressed: () {}),
                   ),
                   Container(
                     width: size.width,
@@ -65,7 +69,9 @@ class _BottomBarState extends State<BottomBar> {
                         IconButton(
                           icon: Icon(
                             Icons.home,
-                            color: currentIndex == 0 ? Colors.orange : Colors.grey.shade400,
+                            color: currentIndex == 0
+                                ? Colors.orange
+                                : Colors.grey.shade400,
                           ),
                           onPressed: () {
                             setBottomBarIndex(0);
@@ -75,7 +81,9 @@ class _BottomBarState extends State<BottomBar> {
                         IconButton(
                             icon: Icon(
                               Icons.restaurant_menu,
-                              color: currentIndex == 1 ? Colors.orange : Colors.grey.shade400,
+                              color: currentIndex == 1
+                                  ? Colors.orange
+                                  : Colors.grey.shade400,
                             ),
                             onPressed: () {
                               setBottomBarIndex(1);
@@ -86,7 +94,9 @@ class _BottomBarState extends State<BottomBar> {
                         IconButton(
                             icon: Icon(
                               Icons.bookmark,
-                              color: currentIndex == 2 ? Colors.orange : Colors.grey.shade400,
+                              color: currentIndex == 2
+                                  ? Colors.orange
+                                  : Colors.grey.shade400,
                             ),
                             onPressed: () {
                               setBottomBarIndex(2);
@@ -94,7 +104,9 @@ class _BottomBarState extends State<BottomBar> {
                         IconButton(
                             icon: Icon(
                               Icons.notifications,
-                              color: currentIndex == 3 ? Colors.orange : Colors.grey.shade400,
+                              color: currentIndex == 3
+                                  ? Colors.orange
+                                  : Colors.grey.shade400,
                             ),
                             onPressed: () {
                               setBottomBarIndex(3);
@@ -112,7 +124,6 @@ class _BottomBarState extends State<BottomBar> {
   }
 }
 
-
 class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -121,12 +132,13 @@ class MyCustomPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     Path path = Path();
-    path.moveTo(0, 20); // Start
-    path.quadraticBezierTo(size.width * 0.20, 0, size.width * 0.35, 0);
-    path.quadraticBezierTo(size.width * 0.40, 0, size.width * 0.40, 20);
-    path.arcToPoint(Offset(size.width * 0.60, 20), radius: Radius.circular(20.0), clockwise: false);
-    path.quadraticBezierTo(size.width * 0.60, 0, size.width * 0.65, 0);
-    path.quadraticBezierTo(size.width * 0.80, 0, size.width, 20);
+    path.moveTo(0, 0); // Start
+    path.lineTo(size.width * 0.20, 0);
+    path.lineTo(size.width * 0.40, 0);
+    path.arcToPoint(Offset(size.width * 0.60, 30), radius: Radius.circular(10.0), clockwise: false);
+    path.lineTo(size.width * 0.60, 0);
+    path.lineTo(size.width * 0.80, 0);
+    path.lineTo(size.width, 0);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
     path.lineTo(0, 20);
