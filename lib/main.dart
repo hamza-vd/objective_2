@@ -23,13 +23,44 @@ class BottomBar extends StatefulWidget {
   _BottomBarState createState() => _BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar> {
-  int currentIndex = 0;
+class _BottomBarState extends State<BottomBar>
+    with SingleTickerProviderStateMixin {
+  double currentIndex = 0;
+  late AnimationController _animationController;
 
-  setBottomBarIndex(index) {
+  setBottomBarIndex(double index) {
     setState(() {
-      currentIndex = index;
+      _animationController.animateTo(index,
+          duration: Duration(milliseconds: 350), curve: Curves.easeOut);
+      print("setBottomBarIndex: $index");
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+        duration: Duration(milliseconds: 350),
+        value: currentIndex,
+        lowerBound: 0,
+        upperBound: 4,
+        vsync: this);
+    _animationController.addListener(() {
+      setState(() {
+        currentIndex = _animationController.value;
+        print("_animationController: $currentIndex");
+      });
+    });
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed)
+        print("_animationController: completed");
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,7 +81,7 @@ class _BottomBarState extends State<BottomBar> {
                 children: [
                   CustomPaint(
                     size: Size(size.width, 80),
-                    painter: MyCustomPainter(),
+                    painter: MyCustomPainter(currentIndex),
                   ),
                   Center(
                     heightFactor: 0.6,
@@ -69,7 +100,7 @@ class _BottomBarState extends State<BottomBar> {
                         IconButton(
                           icon: Icon(
                             Icons.home,
-                            color: currentIndex == 0
+                            color: currentIndex.toInt() == 0
                                 ? Colors.orange
                                 : Colors.grey.shade400,
                           ),
@@ -81,7 +112,7 @@ class _BottomBarState extends State<BottomBar> {
                         IconButton(
                             icon: Icon(
                               Icons.restaurant_menu,
-                              color: currentIndex == 1
+                              color: currentIndex.toInt() == 1
                                   ? Colors.orange
                                   : Colors.grey.shade400,
                             ),
@@ -94,7 +125,7 @@ class _BottomBarState extends State<BottomBar> {
                         IconButton(
                             icon: Icon(
                               Icons.bookmark,
-                              color: currentIndex == 2
+                              color: currentIndex.toInt() == 2
                                   ? Colors.orange
                                   : Colors.grey.shade400,
                             ),
@@ -104,7 +135,7 @@ class _BottomBarState extends State<BottomBar> {
                         IconButton(
                             icon: Icon(
                               Icons.notifications,
-                              color: currentIndex == 3
+                              color: currentIndex.toInt() == 3
                                   ? Colors.orange
                                   : Colors.grey.shade400,
                             ),
@@ -125,6 +156,10 @@ class _BottomBarState extends State<BottomBar> {
 }
 
 class MyCustomPainter extends CustomPainter {
+  double index = 0;
+
+  MyCustomPainter(this.index);
+
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = new Paint()
@@ -133,15 +168,13 @@ class MyCustomPainter extends CustomPainter {
 
     Path path = Path();
     path.moveTo(0, 0); // Start
-    path.lineTo(size.width * 0.20, 0);
-    path.lineTo(size.width * 0.40, 0);
-    path.arcToPoint(Offset(size.width * 0.60, 30), radius: Radius.circular(10.0), clockwise: false);
-    path.lineTo(size.width * 0.60, 0);
-    path.lineTo(size.width * 0.80, 0);
+    path.lineTo(size.width * (index * 0.2), 0);
+    path.arcToPoint(Offset(size.width * ((index * 0.2) + 0.2), 30),
+        radius: Radius.circular(10.0), clockwise: false);
+    path.lineTo(size.width * ((index * 0.2) + 0.2), 0);
     path.lineTo(size.width, 0);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
-    path.lineTo(0, 20);
     canvas.drawShadow(path, Colors.black, 5, true);
     canvas.drawPath(path, paint);
   }
